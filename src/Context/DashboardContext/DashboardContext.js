@@ -1,12 +1,27 @@
-import { createContext, useContext } from "react";
-import {useCustomFetch} from '../../hooks/index'
-import API_URL from "src/url/url";
-const DashboardDataContext = createContext(null);
+import { createContext, useContext, useEffect, useState } from "react";
+import {customFetchMiddleware} from '../../Middlewares/customFetchMiddleware'
+export const DashboardDataContext = createContext(null);
 
-const DashboardDataProvider = ({ children }) => {
-    const { data, loading, error } = useCustomFetch({
-        url: API_URL.GET_USER_DATA_URL,
-    });
+ const DashboardDataProvider = ({ children }) => {
+     const [data, setData] = useState(null);
+     const [loading, setLoading] = useState(false);
+     const [error, setError] = useState(null);
+
+     useEffect(() => {
+         const fetchData = async () => {
+             setLoading(true);
+             try {
+                 const result = await customFetchMiddleware({ url: 'connectctis_get_user_data' });
+                 setData(result.data);
+             } catch (e) {
+                 setError(e);
+             } finally {
+                 setLoading(false);
+             }
+         };
+
+         fetchData();
+     }, []);
 
     return (
         <DashboardDataContext.Provider value={{ data, loading, error }}>
@@ -23,4 +38,4 @@ export const useDashboardData = () => {
     return context;
 };
 
-export default DashboardDataContext;
+export default DashboardDataProvider;
