@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {customFetchMiddleware} from '../../Middlewares/customFetchMiddleware'
-export const DashboardDataContext = createContext(null);
+import {fetchUserData} from '../../Services/dashboardService'
+const DashboardDataContext = createContext(null);
 
- const DashboardDataProvider = ({ children }) => {
+ export const DashboardDataProvider = ({ children }) => {
      const [data, setData] = useState(null);
      const [loading, setLoading] = useState(false);
      const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ export const DashboardDataContext = createContext(null);
          const fetchData = async () => {
              setLoading(true);
              try {
-                 const result = await customFetchMiddleware({ url: 'connectctis_get_user_data' });
+                 const result = await fetchUserData({ url: 'connectctis_get_user_data' }); // Zaktualizowane
                  setData(result.data);
              } catch (e) {
                  setError(e);
@@ -37,5 +37,3 @@ export const useDashboardData = () => {
     }
     return context;
 };
-
-export default DashboardDataProvider;
