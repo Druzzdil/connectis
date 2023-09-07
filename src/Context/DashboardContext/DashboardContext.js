@@ -11,7 +11,7 @@ const DashboardDataContext = createContext(null);
          const fetchData = async () => {
              setLoading(true);
              try {
-                 const result = await fetchUserData({ url: 'connectctis_get_user_data' }); // Zaktualizowane
+                 const result = await fetchUserData({ url: 'connectctis_get_user_data' });
                  setData(result.data);
              } catch (e) {
                  setError(e);
